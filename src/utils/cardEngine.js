@@ -40,6 +40,7 @@ export function calculateSpinScore({ sector, hand, context }) {
     mostLandedColor = null,
     chainLightningActive = false,
     previousMult = 1,
+    lifetimePinHits = 0,
   } = context
 
   // ── Phase 1: +Chips ──
