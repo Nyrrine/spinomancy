@@ -465,7 +465,7 @@ function GameOverScreen({ game, onRestart }) {
                     cardId={card.id}
                     stackCount={card.stackCount}
                     scalingState={card.scalingState}
-                    size="small"
+                    size="default"
                   />
                 </motion.div>
               ))}
@@ -1415,7 +1415,7 @@ function CardHandFan({ cards, firingCardIds = [] }) {
                 scalingState={card.scalingState}
                 disabled={card.disabled}
                 highlighted={isFiring}
-                size="small"
+                size="default"
               />
             </motion.div>
           )

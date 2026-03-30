@@ -764,11 +764,15 @@ export function calculateInterest(money) {
 }
 
 export function getBlindTarget(anteIndex, blindType) {
-  const ante = ANTES[anteIndex]
+  const loopCount = Math.floor(anteIndex / ANTES.length)
+  const wrappedIndex = anteIndex % ANTES.length
+  const ante = ANTES[wrappedIndex]
   if (!ante) return 999999
-  return ante[blindType]
+  const multiplier = Math.pow(2, loopCount)
+  return Math.floor(ante[blindType] * multiplier)
 }
 
 export function getBossBlind(anteIndex) {
-  return BOSS_BLINDS[anteIndex] || BOSS_BLINDS[BOSS_BLINDS.length - 1]
+  const wrappedIndex = anteIndex % BOSS_BLINDS.length
+  return BOSS_BLINDS[wrappedIndex]
 }

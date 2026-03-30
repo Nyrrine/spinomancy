@@ -421,15 +421,9 @@ export default function useGameEngine() {
         // Advance scaling for round completion
         const scaledHand = advanceScaling(cleansedHand, 'round')
 
-        // Check victory (beat ante 8)
-        if (prev.ante >= ANTES.length - 1) {
-          return {
-            ...prev,
-            phase: PHASE.VICTORY,
-            hand: scaledHand,
-            runStats,
-          }
-        }
+        // Infinite loop — after ante 8, loop back with higher targets
+        // No victory screen — the game keeps going forever
+        // Score requirements scale by 2x each loop
 
         // Income
         const unusedSpins = prev.spinsLeft
