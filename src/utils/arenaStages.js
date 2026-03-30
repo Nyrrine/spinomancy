@@ -114,10 +114,13 @@ export function generateArenaLayout() {
 
   // ── Spinning circles at varied heights ──
   const spinners = [
-    { cx: 180, cy: 300, radius: 35, pinCount: 5, speed: 0.02 },
-    { cx: CANVAS_W - 180, cy: 500, radius: 35, pinCount: 5, speed: -0.02 },
-    { cx: CX, cy: 750, radius: 30, pinCount: 4, speed: 0.015 },
-    { cx: 200, cy: 950, radius: 30, pinCount: 4, speed: -0.018 },
+    { cx: 200, cy: 180, radius: 35, pinCount: 5, speed: 0.02 },
+    { cx: CANVAS_W - 200, cy: 180, radius: 35, pinCount: 5, speed: -0.02 },
+    { cx: CX, cy: 330, radius: 40, pinCount: 6, speed: 0.015 },
+    { cx: 160, cy: 420, radius: 30, pinCount: 4, speed: -0.018 },
+    { cx: CANVAS_W - 160, cy: 420, radius: 30, pinCount: 4, speed: 0.018 },
+    { cx: CX - 150, cy: 520, radius: 28, pinCount: 4, speed: -0.015 },
+    { cx: CX + 150, cy: 520, radius: 28, pinCount: 4, speed: 0.015 },
   ]
 
   const cleanBumpers = bumpers.map(b => ({ ...b, hitTime: 0, wasHit: false }))

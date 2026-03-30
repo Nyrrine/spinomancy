@@ -97,6 +97,7 @@ export default function useGameEngine() {
         [CARD_RARITY.UNCOMMON]: RARITY_WEIGHTS[CARD_RARITY.UNCOMMON] * 1.8,
         [CARD_RARITY.RARE]: RARITY_WEIGHTS[CARD_RARITY.RARE] * 2.0,
         [CARD_RARITY.LEGENDARY]: RARITY_WEIGHTS[CARD_RARITY.LEGENDARY] * 2.5,
+        [CARD_RARITY.CURSED]: (RARITY_WEIGHTS[CARD_RARITY.CURSED] || 8) * 1.5,
       }
       const totalWeight = available.reduce((sum, c) => sum + (biasedWeights[c.rarity] || 1), 0)
       let rand = Math.random() * totalWeight
