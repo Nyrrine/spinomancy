@@ -351,7 +351,7 @@ export default function GameLayout({
       <GoldBurst active={cleared} />
 
       {/* Game Chrome */}
-      <div className="relative z-10 min-h-screen flex flex-col" style={{ paddingBottom: floatingHand ? 'clamp(140px, 11vw, 220px)' : 0 }}>
+      <div className="relative z-10 min-h-screen flex flex-col" style={{ paddingBottom: floatingHand ? '240px' : 0 }}>
         {/* ── Two-column layout: Sidebar | Arena ── */}
         <div className="flex-1 flex items-stretch">
           {/* LEFT: Unified Sidebar */}

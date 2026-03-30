@@ -107,8 +107,8 @@ export default function Card({
   const category = CATEGORY_BADGE[card.category] || CATEGORY_BADGE.utility
   const isStackable = card.stackable && count > 1
 
-  const cardW = compact ? 'clamp(85px, 6vw, 120px)' : 'clamp(100px, 7vw, 145px)'
-  const cardH = compact ? 'clamp(118px, 8.3vw, 165px)' : 'clamp(140px, 9.8vw, 200px)'
+  const cardW = compact ? '150px' : '190px'
+  const cardH = compact ? '210px' : '260px'
 
   return (
     <motion.div
@@ -116,9 +116,7 @@ export default function Card({
       className="relative select-none"
       style={{
         width: cardW,
-        minWidth: compact ? '70px' : '85px',
         height: cardH,
-        minHeight: compact ? '95px' : '115px',
         flexShrink: 0,
         perspective: 600,
         transformStyle: 'preserve-3d',
