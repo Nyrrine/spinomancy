@@ -389,7 +389,7 @@ export default function GameLayout({
           </motion.aside>
 
           {/* CENTER+RIGHT: Arena (fills all remaining space) */}
-          <main className="flex-1 flex flex-col items-center justify-center p-[clamp(6px,0.4vw,12px)] relative">
+          <main className="flex-1 flex flex-col items-center justify-center p-[clamp(4px,0.3vw,8px)] relative overflow-hidden">
             <BossBanner boss={boss} />
 
             {/* Mobile scoreboard */}
@@ -428,10 +428,11 @@ export default function GameLayout({
               initial={{ opacity: 0, scale: 0.9 }}
               animate={mounted ? { opacity: 1, scale: 1 } : {}}
               transition={{ delay: 0.3, duration: 0.5, type: 'spring' }}
-              className="relative"
+              className="relative w-full flex items-center justify-center"
+              style={{ maxHeight: 'calc(100vh - 320px)' }}
             >
               {wheelSlot || (
-                <div className="w-[320px] h-[420px] panel flex items-center justify-center">
+                <div className="panel flex items-center justify-center" style={{ width: 'clamp(320px, 40vw, 600px)', height: 'clamp(420px, 60vh, 900px)' }}>
                   <span className="text-[8px] text-text-muted/40">[ ARENA ]</span>
                 </div>
               )}

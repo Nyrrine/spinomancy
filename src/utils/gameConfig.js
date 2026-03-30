@@ -3,19 +3,24 @@
 // ═══════════════════════════════════════
 
 // ── Wheel Sectors ──
+// 16 sectors: 6 red, 5 black, 3 green, 2 gold
 export const SECTORS = [
   { id: 0, color: 'red', label: 'R', baseChips: 10 },
   { id: 1, color: 'black', label: 'B', baseChips: 10 },
-  { id: 2, color: 'red', label: 'R', baseChips: 10 },
-  { id: 3, color: 'black', label: 'B', baseChips: 10 },
-  { id: 4, color: 'red', label: 'R', baseChips: 10 },
-  { id: 5, color: 'green', label: '0', baseChips: 0 },
-  { id: 6, color: 'black', label: 'B', baseChips: 10 },
-  { id: 7, color: 'red', label: 'R', baseChips: 10 },
-  { id: 8, color: 'black', label: 'B', baseChips: 10 },
-  { id: 9, color: 'gold', label: '$', baseChips: 25 },
-  { id: 10, color: 'red', label: 'R', baseChips: 10 },
-  { id: 11, color: 'black', label: 'B', baseChips: 10 },
+  { id: 2, color: 'green', label: '0', baseChips: 0 },
+  { id: 3, color: 'red', label: 'R', baseChips: 10 },
+  { id: 4, color: 'black', label: 'B', baseChips: 10 },
+  { id: 5, color: 'red', label: 'R', baseChips: 10 },
+  { id: 6, color: 'gold', label: '$', baseChips: 25 },
+  { id: 7, color: 'black', label: 'B', baseChips: 10 },
+  { id: 8, color: 'red', label: 'R', baseChips: 10 },
+  { id: 9, color: 'green', label: '0', baseChips: 0 },
+  { id: 10, color: 'black', label: 'B', baseChips: 10 },
+  { id: 11, color: 'red', label: 'R', baseChips: 10 },
+  { id: 12, color: 'black', label: 'B', baseChips: 10 },
+  { id: 13, color: 'green', label: '0', baseChips: 0 },
+  { id: 14, color: 'red', label: 'R', baseChips: 10 },
+  { id: 15, color: 'gold', label: '$', baseChips: 25 },
 ]
 
 export const SECTOR_COLORS = {
@@ -706,6 +711,41 @@ export const CARDS = {
     cost: 4,
     effect: { type: 'lifetime_pin_chips', value: 1, per: 50, trigger: 'per_spin' },
     ascii: '#p#',
+  },
+
+  // ── Sector Manipulation Cards ──
+  gold_fever: {
+    id: 'gold_fever',
+    name: 'Gold Fever',
+    description: 'Add 2 extra gold sectors',
+    rarity: CARD_RARITY.RARE,
+    category: CARD_CATEGORY.PROBABILITY,
+    stackable: true,
+    cost: 6,
+    effect: { type: 'add_gold_sectors', value: 2, trigger: 'always' },
+    ascii: '$$!',
+  },
+  green_garden: {
+    id: 'green_garden',
+    name: 'Green Garden',
+    description: 'Add 3 extra green sectors (pairs with Void Ball)',
+    rarity: CARD_RARITY.UNCOMMON,
+    category: CARD_CATEGORY.PROBABILITY,
+    stackable: true,
+    cost: 3,
+    effect: { type: 'add_green_sectors', value: 3, trigger: 'always' },
+    ascii: '[0]',
+  },
+  sector_doubler: {
+    id: 'sector_doubler',
+    name: 'Sector Doubler',
+    description: 'Double ALL sectors (24 instead of 12)',
+    rarity: CARD_RARITY.LEGENDARY,
+    category: CARD_CATEGORY.PROBABILITY,
+    stackable: false,
+    cost: 10,
+    effect: { type: 'double_sectors', trigger: 'always' },
+    ascii: 'x2S',
   },
 }
 

@@ -319,9 +319,9 @@ export default function BlindSelect({ anteIndex, currentBlind, onSelectBlind, sc
             </div>
           </motion.div>
 
-          <div className="flex justify-center flex-wrap items-start" style={{ gap: 'clamp(8px, 0.7vw, 16px)' }}>
+          <div className="flex justify-center items-center" style={{ gap: 'clamp(12px, 1vw, 24px)' }}>
             {BLIND_TYPES.map((type, i) => (
-              <div key={type} className="flex items-center" style={{ gap: 'clamp(8px, 0.7vw, 16px)' }}>
+              <div key={type} className="flex items-center" style={{ gap: 'clamp(12px, 1vw, 24px)' }}>
                 <BlindCard
                   type={type}
                   target={ante[type]}

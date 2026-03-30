@@ -707,6 +707,56 @@ export function getModifiedSectors(hand, bossEffect) {
     }
   }
 
+  // Gold Fever: add extra gold sectors
+  for (const card of hand) {
+    if (card.disabled) continue
+    const def = CARDS[card.id]
+    if (!def || def.effect.type !== 'add_gold_sectors') continue
+    const stacks = card.stackCount || 1
+    const goldTemplate = sectors.find(s => s.color === 'gold')
+    if (goldTemplate) {
+      const count = def.effect.value * stacks
+      for (let i = 0; i < count; i++) {
+        sectors.push({ ...goldTemplate, id: 300 + i })
+      }
+    }
+  }
+
+  // Green Garden: add extra green sectors
+  for (const card of hand) {
+    if (card.disabled) continue
+    const def = CARDS[card.id]
+    if (!def || def.effect.type !== 'add_green_sectors') continue
+    const stacks = card.stackCount || 1
+    const greenTemplate = sectors.find(s => s.color === 'green') || { id: 0, color: 'green', label: '0', baseChips: 0 }
+    const count = def.effect.value * stacks
+    for (let i = 0; i < count; i++) {
+      sectors.push({ ...greenTemplate, id: 310 + i })
+    }
+  }
+
+  // Sector Doubler: duplicate all current sectors
+  for (const card of hand) {
+    if (card.disabled) continue
+    const def = CARDS[card.id]
+    if (!def || def.effect.type !== 'double_sectors') continue
+    const current = [...sectors]
+    current.forEach((s, i) => {
+      sectors.push({ ...s, id: 400 + i })
+    })
+  }
+
+  // Chaos Master: randomize all sector baseChips (0-50)
+  for (const card of hand) {
+    if (card.disabled) continue
+    const def = CARDS[card.id]
+    if (!def || def.effect.type !== 'chaos_xmult') continue
+    sectors = sectors.map(s => ({
+      ...s,
+      baseChips: Math.floor(Math.random() * 51),
+    }))
+  }
+
   return sectors
 }
 

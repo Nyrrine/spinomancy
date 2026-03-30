@@ -61,8 +61,10 @@ function initialState() {
     blockerActive: false,
     blockerTimer: null,
     specialBalls: [],
-    accumulatedChips: 0,  // chips accumulate across spins within a blind
-    accumulatedMult: 1,   // mult accumulates across spins within a blind
+    accumulatedChips: 0,
+    accumulatedMult: 1,
+    shopPity: { visitsWithoutRare: 0, visitsWithoutLegendary: 0 },
+    shopEvent: null,
   }
 }
 
@@ -333,14 +335,16 @@ export default function useGameEngine() {
       let goldBonus = 0
       if (sector.color === 'gold') {
         goldBonus = 3
-        // Jackpot Slot card adds more (handled in card effects, but base $3 here)
         for (const card of prev.hand) {
           if (card.disabled) continue
           const def = CARDS[card.id]
           if (def?.effect.type === 'gold_money') {
-            goldBonus += def.effect.value * (card.stackCount || 1)
+            const val = def.effect.value * (card.stackCount || 1)
+            if (isFinite(val)) goldBonus += val
           }
         }
+        // Safety: cap and prevent NaN
+        if (!isFinite(goldBonus) || goldBonus < 0) goldBonus = 3
       }
 
       return {
@@ -431,7 +435,53 @@ export default function useGameEngine() {
           + (unusedSpins * SHOP_CONFIG.unusedSpinBonus)
           + calculateInterest(prev.money)
         const newMoney = prev.money + income
-        const shopCards = getShopCards(scaledHand)
+        let shopCards = getShopCards(scaledHand)
+
+        // ── Shop pity system ──
+        const pity = { ...prev.shopPity }
+        const hasRare = shopCards.some(c => c && (c.rarity === 'rare' || c.rarity === 'legendary' || c.rarity === 'cursed'))
+        const hasLegendary = shopCards.some(c => c && c.rarity === 'legendary')
+
+        if (!hasRare) pity.visitsWithoutRare++
+        else pity.visitsWithoutRare = 0
+        if (!hasLegendary) pity.visitsWithoutLegendary++
+        else pity.visitsWithoutLegendary = 0
+
+        // Pity: guarantee rare after 3 dry visits
+        if (pity.visitsWithoutRare >= 3 && shopCards.length > 0) {
+          const rareCards = Object.values(CARDS).filter(c => c.rarity === 'rare')
+          if (rareCards.length > 0) {
+            shopCards[0] = { ...rareCards[Math.floor(Math.random() * rareCards.length)] }
+            pity.visitsWithoutRare = 0
+          }
+        }
+        // Pity: guarantee legendary after 5 dry visits
+        if (pity.visitsWithoutLegendary >= 5 && shopCards.length > 1) {
+          const legendaryCards = Object.values(CARDS).filter(c => c.rarity === 'legendary')
+          if (legendaryCards.length > 0) {
+            shopCards[1] = { ...legendaryCards[Math.floor(Math.random() * legendaryCards.length)] }
+            pity.visitsWithoutLegendary = 0
+          }
+        }
+
+        // ── Shop events (10% chance) ──
+        let shopEvent = null
+        const eventRoll = Math.random()
+        if (eventRoll < 0.033) shopEvent = 'sale'           // ~3.3%: half price
+        else if (eventRoll < 0.066) shopEvent = 'rare_finds' // ~3.3%: all rare+
+        else if (eventRoll < 0.1) shopEvent = 'bonus_ball'   // ~3.3%: free ball
+
+        // Apply shop event effects
+        if (shopEvent === 'sale') {
+          shopCards = shopCards.map(c => c ? { ...c, cost: Math.max(1, Math.floor(c.cost / 2)) } : c)
+        }
+        if (shopEvent === 'rare_finds') {
+          const rarePool = Object.values(CARDS).filter(c => c.rarity === 'rare' || c.rarity === 'legendary')
+          shopCards = shopCards.map(() => {
+            const pick = rarePool[Math.floor(Math.random() * rarePool.length)]
+            return pick ? { ...pick } : null
+          })
+        }
 
         return {
           ...prev,
@@ -446,6 +496,8 @@ export default function useGameEngine() {
           bossEffect: null,
           activeSectors: SECTORS,
           runStats,
+          shopPity: pity,
+          shopEvent,
         }
       }
 
