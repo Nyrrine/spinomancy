@@ -116,7 +116,10 @@ export default function Card({
       className="relative select-none"
       style={{
         width: cardW,
+        minWidth: compact ? '70px' : '85px',
         height: cardH,
+        minHeight: compact ? '95px' : '115px',
+        flexShrink: 0,
         perspective: 600,
         transformStyle: 'preserve-3d',
       }}
