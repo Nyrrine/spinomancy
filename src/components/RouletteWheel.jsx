@@ -694,9 +694,17 @@ const RouletteWheel = forwardRef(function RouletteWheel({ onResult, onStatsUpdat
           const landedSlot = slots.find(s => ball.x >= s.x && ball.x < s.x + s.w) || slots[0]
           ball.landedSector = landedSlot.sector; sfx.pop()
           shakeIntensityRef.current = 4 // shake on landing
-          // Green instant reset: when ANY ball lands on green, reset ALL pins immediately
+          // Green instant reset: reset ALL pins AND auto-respin the ball
           if (landedSlot.sector.color === 'green') {
             for (const b of bumpers) { b.wasHit = false; b.hitTime = 0 }
+            // Auto-respin: relaunch this ball from a random top position
+            ball.settled = false; ball.active = true
+            ball.x = WALL_LEFT + 30 + Math.random() * (WALL_RIGHT - WALL_LEFT - 60)
+            ball.y = 25
+            ball.vx = (Math.random() - 0.5) * 3
+            ball.vy = 2
+            ball.landedSector = null
+            if (settleCountsRef.current[bi] !== undefined) settleCountsRef.current[bi] = 0
           }
         }
       }
