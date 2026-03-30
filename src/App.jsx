@@ -1333,11 +1333,11 @@ function CardHandFan({ cards, firingCardIds = [] }) {
 
   if (count === 0) return null
 
-  // For large hands (8+), use scrollable layout when fanned
-  const isLargeHand = count > 7
-  const fanAngle = isLargeHand ? 0 : count <= 1 ? 0 : Math.min(count * 4, 20)
-  const fanOverlap = isLargeHand ? -12 : count > 2 ? -18 : count > 1 ? -10 : 0
-  const stackOverlap = -68
+  // Always fan like Balatro — overlap tighter with more cards, never scroll
+  const fanAngle = count <= 1 ? 0 : Math.min(count * 3, 15)
+  // Overlap scales with card count so they always fit on screen
+  const fanOverlap = count <= 2 ? -40 : count <= 5 ? -100 : count <= 8 ? -130 : -150
+  const stackOverlap = -160
 
   const isOpen = fanned || firingCardIds.length > 0
 
@@ -1347,7 +1347,6 @@ function CardHandFan({ cards, firingCardIds = [] }) {
       onMouseEnter={() => setFanned(true)}
       onMouseLeave={() => setFanned(false)}
       onClick={() => setFanned(f => !f)}
-      style={isOpen && isLargeHand ? { maxWidth: '90vw', overflowX: 'auto', overflowY: 'visible', paddingBottom: '4px' } : {}}
     >
       {/* Deck label when collapsed */}
       <AnimatePresence>
@@ -1366,11 +1365,9 @@ function CardHandFan({ cards, firingCardIds = [] }) {
       </AnimatePresence>
 
       <div
-        className={`flex items-end relative ${isOpen && isLargeHand ? 'justify-start' : 'justify-center'}`}
+        className="flex items-end relative justify-center"
         style={{
-          marginLeft: isOpen && isLargeHand ? 0 : (isOpen ? fanOverlap : stackOverlap) * count / 2,
           perspective: '800px',
-          minWidth: isOpen && isLargeHand ? 'max-content' : undefined,
         }}
       >
         {cards.map((card, i) => {

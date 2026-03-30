@@ -478,7 +478,7 @@ export default function GameLayout({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6, type: 'spring', stiffness: 80, damping: 15 }}
         >
-          <div className="pointer-events-auto" style={{ maxWidth: '92vw', overflowX: 'auto', overflowY: 'visible' }}>
+          <div className="pointer-events-auto flex justify-center" style={{ overflow: 'visible' }}>
             {handCards}
           </div>
         </motion.div>
