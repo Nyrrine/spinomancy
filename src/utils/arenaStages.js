@@ -1,16 +1,16 @@
 // ═══════════════════════════════════════
-// ARENA LAYOUT — Tall organized pachinko
+// ARENA LAYOUT — Wide organized pachinko
 // ═══════════════════════════════════════
-// 1200px tall, clean offset rows, geometric bonus patterns,
+// Wide horizontal layout, clean offset rows, geometric bonus patterns,
 // 4 cannons, no corner rails, 16 sectors.
 
-const CANVAS_W = 700
-const CANVAS_H = 1200
+const CANVAS_W = 900
+const CANVAS_H = 700
 const WALL_LEFT = 20
 const WALL_RIGHT = CANVAS_W - 20
-const SECTOR_Y = 1130
+const SECTOR_Y = 630
 const CX = CANVAS_W / 2
-const CY = 580
+const CY = 330
 
 function pin(x, y, radius = 7, type = 'normal') {
   return { x, y, radius, type, hitTime: 0, wasHit: false }
@@ -35,9 +35,9 @@ export function generateArenaLayout() {
   }
 
   // ── Full-width offset grid filling the tall arena ──
-  const rows = 42
-  const spacing = 25
-  const startY = 80
+  const rows = 22
+  const spacing = 24
+  const startY = 70
 
   const usableW = WALL_RIGHT - WALL_LEFT - 20
 
@@ -46,7 +46,7 @@ export function generateArenaLayout() {
     if (y > SECTOR_Y - 35) continue
 
     const isOffset = r % 2 === 1
-    const cols = isOffset ? 14 : 15
+    const cols = isOffset ? 18 : 19
     const colW = usableW / cols
     const xStart = WALL_LEFT + 10 + (isOffset ? colW / 2 : 0)
 
@@ -106,10 +106,10 @@ export function generateArenaLayout() {
 
   // ── 4 cannons at different heights ──
   const cannons = [
-    pipe(35, 400, WALL_RIGHT - 50, 120, '#2a5daa'),       // left low → right high
-    pipe(WALL_RIGHT - 35, 600, 50, 200, '#7b4bb3'),       // right mid → left high
-    pipe(35, 850, WALL_RIGHT - 50, 450, '#c7332d'),       // left deep → right mid
-    pipe(WALL_RIGHT - 35, 950, 50, 550, '#3d8b37'),       // right deep → left mid
+    pipe(35, 300, WALL_RIGHT - 50, 100, '#2a5daa'),       // left low → right high
+    pipe(WALL_RIGHT - 35, 400, 50, 150, '#7b4bb3'),       // right mid → left high
+    pipe(35, 500, WALL_RIGHT - 50, 250, '#c7332d'),       // left deep → right mid
+    pipe(WALL_RIGHT - 35, 520, 50, 200, '#3d8b37'),       // right deep → left mid
   ]
 
   // ── Spinning circles at varied heights ──

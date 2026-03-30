@@ -26,16 +26,16 @@ The game is designed for a **Math in the Modern World (MATWRLD)** course. Every 
 
 ### Wheel Sectors
 
-The roulette wheel has 12 sectors:
+The roulette wheel has 16 sectors:
 
 | Sector | Count | Base Chips | Color |
 |--------|-------|------------|-------|
-| Red (R) | 5 | 10 | Red |
-| Black (B) | 4 | 10 | Black |
-| Green (0) | 1 | 0 | Green |
-| Gold ($) | 1 | 25 | Gold |
+| Red (R) | 6 | 10 | Red |
+| Black (B) | 5 | 10 | Black |
+| Green (0) | 3 | 0 | Green |
+| Gold ($) | 2 | 25 | Gold |
 
-Green is the "miss" sector — it awards nothing by default. Gold is the jackpot sector with 2.5x the standard chip value. The uneven distribution (5 red vs. 4 black vs. 1 gold) creates asymmetric probability that players must reason about.
+Green is the "miss" sector — it awards nothing by default (unless modified by Void Ball). Gold is the jackpot sector with 2.5x the standard chip value. The expanded 16-sector wheel creates richer probability distributions — with 3 green sectors (18.75%), risk management becomes more critical, while 2 gold sectors (12.5%) make gold-targeting strategies more viable. Sector Manipulation cards can further reshape the wheel's composition mid-run.
 
 ### Arena Physics
 
@@ -43,11 +43,10 @@ The ball doesn't just fall — it navigates a rich physical environment:
 
 - **Pin Grid** — Hundreds of pins arranged in offset rows. Normal pins (white) bounce the ball; **bonus pins** (gold) award extra chips; **multiplier pins** (red) apply a x1.5 scoring multiplier per hit.
 - **Spinning Circles** — Three rotating pin clusters (left, right, center) that deflect the ball unpredictably, adding chaos to trajectory planning.
-- **Cannons** — Two pipe systems that capture the ball at one location and launch it out at another with high velocity, creating dramatic trajectory changes.
-- **Rails** — Funnel-shaped guide walls at the top corners that channel the ball into the pin field.
+- **4 Cannons** — Four color-coded pipe systems (blue, purple, red, green) positioned at different heights across the arena. Each captures the ball at an entry point and launches it to a distant exit with high velocity, creating dramatic cross-arena trajectory changes and strategic path diversity.
 - **Moving Launcher** — The ball spawns from a horizontally sweeping launcher at the top, adding variability to each drop.
 
-The arena canvas stands 830px tall with a clean play field — all HUD elements (score, spins, ante info) live in a Balatro-style bordered sidebar to the left, keeping the arena uncluttered. Physics constants (gravity: 0.17, friction: 0.994, bounce damping: 0.6) create a satisfying, slightly floaty feel that gives players time to watch their ball navigate the arena.
+The arena canvas stands 1200px tall — a deep, vertical play field that gives the ball more time to interact with pins, spinners, and cannons before reaching the sectors at the bottom. All HUD elements (score, spins, ante info) live in a Balatro-style bordered sidebar to the left, keeping the arena uncluttered. Rails were removed to prevent corner-trapping. Physics constants (gravity: 0.17, friction: 0.994, bounce damping: 0.6) create a satisfying, slightly floaty feel that gives players time to watch their ball navigate the arena.
 
 ### Card System
 
@@ -112,6 +111,22 @@ Cards are categorized by effect type:
 
 **Stacking:** Stackable cards multiply their effects with each additional copy. Two Loaded Dice = +10 chips. Two Weighted Balls compound: each applies 0.5x to Green probability (0.5 x 0.5 = 0.25, a 75% reduction). Three or more copies of Weighted Ball remove Green entirely and add an extra Red sector.
 
+**Cursed Cards** — High-risk, high-reward cards that fundamentally alter the wheel:
+| Card | Effect | Rarity |
+|------|--------|--------|
+| Green Tide | Adds 2 green sectors per stack, BUT +3 Mult | Cursed |
+| Shrinking Wheel | Removes gold sector, +10 chips to all others | Cursed |
+| Chaos Wheel | Randomizes all sector chip values (0–50) each spin | Cursed |
+| Blood Tax | Lose $2 per round, BUT +8 Mult permanently | Cursed |
+| Ghost Zone | 25% of pins invisible, BUT +5 chips per invisible hit | Cursed |
+
+**Sector Manipulation Cards** — Reshape the wheel's composition mid-run:
+| Card | Effect | Rarity |
+|------|--------|--------|
+| Gold Fever | Add 2 extra gold sectors (stacks) | Rare |
+| Green Garden | Add 3 extra green sectors (pairs with Void Ball) | Uncommon |
+| Sector Doubler | Double ALL sectors (32 instead of 16) | Legendary |
+
 **No Hand Limit:** Players can hold unlimited cards — the more you buy, the more powerful your scoring engine becomes. This turns the game into a pure economic optimization problem: every dollar spent on a card is a dollar not earning interest, so players must balance accumulation speed against compounding savings.
 
 ### Shop Economy
@@ -123,6 +138,8 @@ Between blinds, players enter the shop:
 - **Sell price:** 50% of buy cost
 - **Reroll:** $2 base cost, increases by $1 per reroll within a round
 - **Income:** $3 base + $1 per unused spin + interest ($1 per $5 saved, max $5)
+
+**Pity System:** The shop tracks how many visits have passed without offering rare or legendary cards. After 3 consecutive dry visits, a rare card is guaranteed in the next shop. After 5 dry visits, a legendary card is guaranteed. This prevents frustrating runs where RNG denies access to key build pieces — a deliberate design choice that mirrors gacha game mechanics while teaching students about expected wait times and geometric distributions.
 
 **Synergies:** The game recognizes 14 card combinations that produce powerful interactions:
 
@@ -155,6 +172,8 @@ The game has 8 antes, each with 3 blinds (Small, Big, Boss):
 | 8 | 60,000 | 100,000 | 200,000 |
 
 Target scores increase by roughly 2–3x per ante, demanding exponential growth in the player's scoring engine. This makes compound scaling cards (Compounding Interest, Momentum, Snowball) increasingly valuable at higher antes.
+
+**Infinite Game Loop:** After clearing Ante 8, there is no victory screen — the game loops back to Ante 1 with all score requirements doubled. Each subsequent loop doubles again (4x on loop 3, 8x on loop 4, etc.). The player's card collection and scaling state carry over, creating an endless endgame that tests how far a build can scale. This transforms the game from "can you survive 8 antes?" to "how far can your math engine go?" — a natural exploration of exponential growth limits.
 
 ### Boss Blinds
 
@@ -214,12 +233,12 @@ Spinomancy is built so that **every strategic decision is a math problem in disg
 
 The wheel's sector distribution creates a probability space that players must constantly evaluate:
 
-- **P(Red) = 5/12 ≈ 41.7%** — most likely outcome
-- **P(Black) = 4/12 ≈ 33.3%** — second most likely
-- **P(Green) = 1/12 ≈ 8.3%** — the "miss" sector
-- **P(Gold) = 1/12 ≈ 8.3%** — high reward, low probability
+- **P(Red) = 6/16 = 37.5%** — most likely outcome
+- **P(Black) = 5/16 = 31.25%** — second most likely
+- **P(Green) = 3/16 = 18.75%** — the "miss" sectors, a significant threat
+- **P(Gold) = 2/16 = 12.5%** — high reward, low-but-viable probability
 
-Cards like **Weighted Ball** and **Magnet** directly modify these probabilities. A player with two Weighted Balls reduces P(Green) from 8.3% to 2.1% (0.5 x 0.5 compound reduction). Understanding how probability compounds is essential to evaluating whether that third Weighted Ball is worth buying.
+With 3 green sectors on the base wheel, the miss rate is nearly 1-in-5 — making probability manipulation cards far more critical than on a 12-sector wheel. Cards like **Weighted Ball** and **Magnet** directly modify these probabilities. A player with two Weighted Balls reduces P(Green) from 18.75% to ~4.7% (0.5 x 0.5 compound reduction). **Sector Manipulation cards** go further: Gold Fever adds 2 gold sectors (shifting P(Gold) from 12.5% to 22.2% on an 18-sector wheel), while Sector Doubler doubles the entire wheel to 32 sectors, preserving ratios but creating more granular probability distributions. Understanding how these modifications interact is essential to optimizing expected value.
 
 **Independent Events:** Each spin is independent — the ball doesn't "remember" previous outcomes. The arena's chaotic physics (spinning circles, cannon launches, pin deflections) reinforce this viscerally. Players who think a Gold landing is "due" after several misses are experiencing the **Gambler's Fallacy**, which the game's analytics dashboard explicitly counters with real-time convergence data.
 
@@ -249,7 +268,7 @@ Two Compounding Interest cards multiply: 1.5 x 1.5 = 2.25 at start, growing to 2
 
 ### 4. Combinatorics and Optimization
 
-With 29 unique cards, 7 special ball types, and unlimited hand size, players face a rich optimization problem:
+With 40+ unique cards (including Cursed and Sector Manipulation), 7 special ball types, and unlimited hand size, players face a rich optimization problem:
 
 - Which cards maximize expected score given remaining antes and likely boss debuffs?
 - Is it better to buy a new card now or save money for interest ($1 per $5)?
@@ -325,5 +344,7 @@ Spinomancy demonstrates that mathematics is not an abstract academic exercise �
 The most powerful teaching moment is the transition from Ante 4 to Ante 5, where target scores jump from 5,500 to 12,000. Players who relied on linear chip-adding cards hit a wall. The ones who invested in scaling cards — Compounding Interest, Momentum, Snowball — watch their scores grow exponentially. This is the moment where compound growth stops being a formula on a whiteboard and becomes something you *feel* in the gameplay.
 
 Boss blinds serve as the game's lesson in robust decision-making. Students learn that the mathematically optimal strategy isn't the one that maximizes average performance — it's the one that performs well across all scenarios, including adversarial ones. This mirrors real-world applications of game theory in economics, cybersecurity, and public policy.
+
+The infinite game loop after Ante 8 is the ultimate math playground — with scores doubling each cycle, players discover firsthand that exponential growth has no ceiling, but also that compound strategies eventually hit diminishing returns. The question shifts from "can I win?" to "how far can my math engine scale?" — and that's the most powerful lesson of all.
 
 By embedding probability, expected value, combinatorics, compound growth, data analysis, and game theory into a roguelite card game, Spinomancy makes Math in the Modern World something students want to engage with — not because it's required, but because it helps them win.
